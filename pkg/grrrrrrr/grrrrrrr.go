@@ -8,6 +8,7 @@ import (
 	"log"
 	"math"
 	"strings"
+	"sync"
 
 	"github.com/lulzshadowwalker/grrrrrrr/pkg/enum"
 	gm "github.com/lulzshadowwalker/grrrrrrr/pkg/math"
@@ -163,16 +164,31 @@ func process(m image.Image, processor func(color.Color) color.Color) (image.Imag
 		return nil, errors.New("no image was passed to the function")
 	}
 
+	const rc int = 4
+	var wg sync.WaitGroup
+	wg.Add(rc)
+	
 	b := m.Bounds()
 	out := image.NewNRGBA(image.Rect(b.Min.X, b.Min.Y, b.Max.X, b.Max.Y))
+	stepY := (b.Max.Y - b.Min.Y) / rc
 
-	for y := b.Min.Y; y < b.Max.Y; y++ {
-		for x := b.Min.X; x < b.Max.X; x++ {
-			c := processor(m.At(x, y))
- 			out.Set(x, y, c) 
-		}
+
+	for i := 0; i < rc; i++ {	
+		go func(minY int){
+			maxY := minY + stepY
+
+			for y := minY; y < maxY; y++ {
+				for x := b.Min.X; x < b.Max.X; x++ {
+					c := processor(m.At(x, y))
+					out.Set(x, y, c) 
+				}
+			}
+
+			wg.Done()
+		}(b.Min.Y + i*stepY)
 	}
 
+	wg.Wait()
 	return out, nil
 }
 
