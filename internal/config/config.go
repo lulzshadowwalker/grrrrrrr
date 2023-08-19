@@ -60,8 +60,8 @@ func init() {
 - singleChannel
 - shades
 `)
-	flag.IntVar(&shadeCount, "shadeCount", -1, "determines the number of shades when using the [shades] conversion method")
-	cch := flag.String("colorChannel", "red", `determines which color channel to use for --method="singleChannle"`)
+	flag.IntVar(&shadeCount, "shadeCount", -1, "determines the number of shades when using the [shades] conversion method (default 8)")
+	cch := flag.String("colorChannel", "red", `determines which color channel to use for --method="singleChannel"`)
 
 	flag.Parse()
 	
