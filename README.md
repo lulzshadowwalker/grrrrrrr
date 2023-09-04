@@ -42,7 +42,7 @@
       - decomposeMin
       - decomposeMax
       - singleChannel
-      - shades
+      - shades ( might wanna use this with a blurring effect to smoothen out the image e.g. [gauswuchs](https://github.com/lulzshadowwalker/gauswuchs)
 <br> [see implementation comments for description](pkg/grrrrrrr/grrrrrrr.go)
 - colorChannel `string`<br>
 *determines which color channel to use for --method="singleChannel"<br>
